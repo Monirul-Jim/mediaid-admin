@@ -1,0 +1,115 @@
+'use client'
+import { useCategories } from '@/hooks/useCategories';
+import { ToggleContext } from '@/provider/contextProvider';
+import Image from 'next/image';
+import { useContext } from 'react';
+import CategoriesLoader from '../loader/categoriesLoader';
+import useCategoriesAdd from '@/hooks/useCategoriesAdd';
+
+const Categories = () => {
+  const { categories, isLoading } = useCategoriesAdd()
+  console.log(categories);
+  const { data } = useContext(ToggleContext)
+  // const { categories, isLoading } = useCategories()
+  return (
+    <ul className="space-y-2">
+      {isLoading ? (
+        [...Array(10).keys()].map((x) => (
+          <li key={x}>
+            <CategoriesLoader />
+          </li>
+        ))
+      ) : (
+        categories?.map((category, i) => {
+          const { name, sub } = category.cate;
+          const imageUrl = sub.length > 0 ? sub[0].url : ''; // Get the first image URL
+
+          return (
+            <li key={i} className="flex gap-2 h-[40px] items-center cursor-pointer lg:px-2 xl:px-3 py-1 rounded hover:bg-slate-100">
+              <Image
+                src={imageUrl}
+                alt="category"
+                width={30}
+                height={30}
+              />
+
+              <h3 className={`text-sm transition-all origin-left ${data.sidebarCollapse ? "invisible scale-0" : "visible scale-100"}`}>
+                {name}
+              </h3>
+            </li>
+          );
+        })
+      )}
+    </ul>
+  );
+};
+
+export default Categories;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use client'
+import { useCategories } from '@/hooks/useCategories';
+import { ToggleContext } from '@/provider/contextProvider';
+import Image from 'next/image';
+import { useContext } from 'react';
+import CategoriesLoader from '../loader/categoriesLoader';
+import useCategoriesAdd from '@/hooks/useCategoriesAdd';
+import Link from 'next/link';
+
+const Categories = () => {
+  const { categories, isLoading } = useCategoriesAdd()
+  const { data } = useContext(ToggleContext)
+  // const { categories, isLoading } = useCategories()
+  return (
+    <ul className="space-y-2">
+      {isLoading ? (
+        [...Array(10).keys()].map((x) => (
+          <li key={x}>
+            <CategoriesLoader />
+          </li>
+        ))
+      ) : (
+        categories?.map((category, i) => {
+          const { name, sub } = category.cate;
+          const imageUrl = sub.length > 0 ? sub[0].url : '';
+          return (
+            <div key={category._id}>
+              <Link href={`/showproductbycategory/${category?._id}`}>
+                <li className="flex gap-2 h-[40px] items-center cursor-pointer lg:px-2 xl:px-3 py-1 rounded hover:bg-slate-100">
+                  <Image
+                    src={imageUrl}
+                    alt="category"
+                    className='rounded-lg'
+                    width={30}
+                    height={30}
+                  />
+
+                  <h3 className={`text-sm transition-all origin-left ${data.sidebarCollapse ? "invisible scale-0" : "visible scale-100"}`}>
+                    {name}
+                  </h3>
+                </li>
+              </Link>
+            </div>
+          );
+        })
+      )}
+    </ul>
+  );
+};
+
+export default Categories;

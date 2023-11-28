@@ -4,40 +4,24 @@ import { Toaster, toast } from "react-hot-toast";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 
 const AddCategory = () => {
+  // const [category, setCategory] = useState("");
+  // const [subcategories, setSubcategories] = useState([]);
+  // const [currentSubcategory, setCurrentSubcategory] = useState("");
+
   const [category, setCategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [currentSubcategory, setCurrentSubcategory] = useState("");
-  // console.log({ currentSubcategory });
+  const [currentSubcategoryUrl, setCurrentSubcategoryUrl] = useState(""); // New state for subcategory URL
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     let cate = { name: category, sub: [subcategories] };
-  //     console.log(cate);
-  //     const data  = await axios.post(
-  //       `http://localhost:3000/api/categories`,
-  //       {
-  //         cate,
-  //       }
-  //     );
-
-  //     console.log({ data });
-  //     if (data) {
-  //       toast.success("Successfully toasted!");
-  //     }
-  //     setCategory("");
-  //     setCurrentSubcategory("");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { name, sub } = {
       name: category,
-      sub: subcategories,
+      sub: subcategories.map((subcategory, index) => ({
+        name: subcategory,
+        url: subcategoryUrls[index], // Use the corresponding URL for each subcategory
+      })),
     };
 
     if (!name || !subcategories) {
@@ -45,24 +29,29 @@ const AddCategory = () => {
     }
 
     try {
-      const data = await axios.post(`http://localhost:3000/api/categories`, {
+      const data = await axios.post(`http://localhost:5000/increase-category`, {
         cate: { name, sub },
       });
-
       if (data) {
         toast.success("Successfully toasted!");
       }
       setCategory("");
       setCurrentSubcategory("");
+      setCurrentSubcategoryUrl("");
+      setSubcategoryUrls([]); // Clear the subcategory URLs
     } catch (error) {
       console.error(error);
     }
   };
 
+  const [subcategoryUrls, setSubcategoryUrls] = useState([]);
+
   const handleAddSubcategory = () => {
     if (currentSubcategory) {
       setSubcategories([...subcategories, currentSubcategory]);
+      setSubcategoryUrls([...subcategoryUrls, currentSubcategoryUrl]); // Save the URL for the current subcategory
       setCurrentSubcategory("");
+      setCurrentSubcategoryUrl("");
       // toaster show
       toast.success("Sub-Category save", {
         style: {
@@ -77,10 +66,10 @@ const AddCategory = () => {
       });
     } else if (subcategories.length > 0) {
       setCurrentSubcategory(subcategories[subcategories.length - 1]);
+      setCurrentSubcategoryUrl(subcategoryUrls[subcategoryUrls.length - 1]);
     }
-    console.log({ subcategories });
+    console.log({ subcategories, subcategoryUrls });
   };
-
   return (
     <div className="mx-4">
       <Toaster />
@@ -113,6 +102,13 @@ const AddCategory = () => {
               value={currentSubcategory}
               onChange={(e) => setCurrentSubcategory(e.target.value)}
             />
+            <input
+              className="input input-bordered w-full max-w-xs ml-2"
+              type="text"
+              placeholder="Subcategory URL"
+              value={currentSubcategoryUrl}
+              onChange={(e) => setCurrentSubcategoryUrl(e.target.value)}
+            />
             <div
               className="  ml-8 btn btn-warning btn-xs sm:btn-sm md:btn-md lg:btn-lg "
               disabled={!currentSubcategory}
@@ -136,3 +132,7 @@ const AddCategory = () => {
 };
 
 export default AddCategory;
+
+
+
+

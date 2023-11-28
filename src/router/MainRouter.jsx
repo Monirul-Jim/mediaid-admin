@@ -10,6 +10,7 @@ import ProductDetails from "../pages/products/ProductDetails";
 import AddCategory from "../pages/AddCategory";
 import Overview from "../pages/overview/Overview";
 import BannerEdit from "../pages/BannerEdit";
+import AdminShowProductDetails from "../components/AdminShowProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       {
         path: "orderList/:id",
         element: <OrderDetails />,
+        loader: ({ params }) => fetch(`http://localhost:5000/user-order-collection/${params.id}`)
       },
       {
         path: "productList",
@@ -51,6 +53,11 @@ const router = createBrowserRouter([
       {
         path: "add-category",
         element: <AddCategory />,
+      },
+      {
+        path: 'admin-show-product-details/:id',
+        element: <AdminShowProductDetails />,
+        loader: ({ params }) => fetch(`http://localhost:5000/get-product-admin/${params?.id}`)
       },
       {
         path: "productList/:id",

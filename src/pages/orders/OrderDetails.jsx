@@ -1,7 +1,12 @@
 import moment from "moment/moment";
 import OrderedProductTable from "../../components/OrderProductTable";
+import useOrderDetails from '../../hooks/useOrderDetails.js'
+import { useLoaderData } from "react-router-dom";
 
 const OrderDetails = () => {
+  const loaderData = useLoaderData();
+  const parsedData = JSON.parse(loaderData.parseItem.cartState);
+  const cartItems = parsedData.cartItems;
   return (
     <div>
       <div className="text-sm breadcrumbs md:ml-4">
@@ -12,17 +17,16 @@ const OrderDetails = () => {
           <li>Order Details</li>
         </ul>
       </div>
-
       <div className="w-full min-h-screen p-2">
         <div className="h-fit  w-full bg-slate-50 rounded p-3 shadow-md">
           <h1 className="text-base md:text-xl font-semibold text-gray-700">
-            Order Details: #5435j4l645
+            Order Details: #{loaderData?._id}
           </h1>
           <p className="text-xs md:text-sm text-slate-500">
-            {moment(Date.now()).format("LLL")}
+            {loaderData?.savedInfo?.formattedDate}
           </p>
           <div className="text-base md:text-lg font-semibold text-gray-600 mt-2 flex items-center gap-1">
-            Status:
+            Status: {loaderData?.status}
             <div
               className={`px-2 ${"bg-green-300"}  bg-opacity-30 rounded-full`}>
               {/* className={`px-2 ${
@@ -34,10 +38,6 @@ const OrderDetails = () => {
                   ? "bg-slate-400"
                   : ""
               }  bg-opacity-30 rounded-full`} */}
-
-              <p className="text-xs md:text-sm font-medium text-green-600">
-                Complete
-              </p>
               {/* <p
                 className={`text-xs md:text-sm font-medium ${
                   orderDetails?.status === "Completed"
@@ -53,7 +53,7 @@ const OrderDetails = () => {
             </div>
           </div>
         </div>
-        <div className="h-fit w-full bg-slate-50 rounded p-3 grid md:grid-cols-3 gap-y-4 md:gap-y-0 mt-4 shadow-md">
+        {/* <div className="h-fit w-full bg-slate-50 rounded p-3 grid md:grid-cols-3 gap-y-4 md:gap-y-0 mt-4 shadow-md">
           <div className="space-y-1 border-b md:border-0">
             <h1 className="text-base md:text-lg font-semibold text-slate-600">
               Billing Address
@@ -63,14 +63,9 @@ const OrderDetails = () => {
             </p>
             <div className="text-sm text-slate-500">
               <p>
-                {/* {orderDetails?.shipTo?.address &&
-                  orderDetails?.shipTo?.address + ","} */}
                 Balakair Bazar,
               </p>
               <p>
-                {/* {orderDetails?.shipTo?.union} ,{orderDetails?.shipTo?.upazilla}{" "}
-                ,{orderDetails?.shipTo?.district} ,
-                {orderDetails?.shipTo?.division}{" "} */}
                 Karpara,Gopalganj,Dhaka
               </p>
             </div>
@@ -95,14 +90,9 @@ const OrderDetails = () => {
             <div className="text-sm text-slate-500">
               <p>
                 {" "}
-                {/* {orderDetails?.shipTo?.address &&
-                  orderDetails?.shipTo?.address + ","} */}
                 Balakair, Bazar
               </p>
               <p>
-                {/* {orderDetails?.shipTo?.union} ,{orderDetails?.shipTo?.upazilla}{" "}
-                ,{orderDetails?.shipTo?.district} ,
-                {orderDetails?.shipTo?.division}{" "} */}
                 Karpara,Gopalganj,Dhaka
               </p>
             </div>
@@ -124,9 +114,9 @@ const OrderDetails = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="h-fit  w-full bg-slate-50 rounded p-3 shadow-md mt-4">
-          <OrderedProductTable />
+          <OrderedProductTable cartItems={cartItems} />
           {/* orderDetails={orderDetails?.orderItems}  */}
         </div>
       </div>

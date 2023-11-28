@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
 
-const OrderedProductTable = () => {
-  // console.log(orderDetails);
-  const [subtotal, setSubtotal] = useState(0);
-  //   useEffect(() => {
-  //     let total = 0;
-  //     orderDetails?.forEach((product) => {
-  //       total += product?.price * product?.quantity;
-  //     });
-  //     setSubtotal(total);
-  //   }, [orderDetails]);
+
+const OrderedProductTable = ({ cartItems }) => {
+  const subtotal = cartItems.reduce((sum, product) => {
+    return sum + product.quantity + product.totalPrice;
+  }, 0);
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -19,29 +13,35 @@ const OrderedProductTable = () => {
             <th>No.</th>
             <th>Products</th>
             <th className="text-right">Quantity</th>
-            <th className="text-right">Price</th>
+            <th className="text-right">Main Price</th>
+            <th className="text-right">Percentage</th>
+            <th className="text-right">Main Product Price After Discount</th>
+
             <th className="text-right">Amount</th>
           </tr>
         </thead>
         <tbody>
-          {[1, 2, 3]?.map((product, index) => (
+          {cartItems?.map((product, index) => (
             <>
-              <tr>
+              <tr key={product?._id}>
                 <th className="font-medium">{index + 1}</th>
                 <td>
                   <div>
                     <p className="text-base font-semibold text-gray-600">
-                      Digital x-ray hd2Q
+                      {product?.title}
                     </p>
-                    <p className="text-sm text-slate-500">
+                    {/* <p className="text-sm text-slate-500">
                       model - KDJFK-343KDF-265
-                      {/* {product?.skuId} */}
-                    </p>
+                    </p> */}
                   </div>
                 </td>
-                <td className="text-right">4</td>
-                <td className="text-right">$400</td>
-                <td className="text-right">$1600</td>
+                <td className="text-right">{product?.quantity}</td>
+                <td className="text-right">${product?.price}</td>
+                <td className="text-right">${product?.discountPercent}</td>
+                <td className="text-right">${(product?.price * (100 - (product?.discountPercent || 0)) / 100).toFixed(2)}</td>
+                <td className="text-right">${(product?.price * (100 - (product?.discountPercent || 0)) / 100).toFixed(2) * product?.quantity}</td>
+                {/* <td className="text-right">{product?.quantity * product?.totalPrice}</td> */}
+
               </tr>
             </>
           ))}
@@ -49,10 +49,10 @@ const OrderedProductTable = () => {
       </table>
       <div className="w-full h-fit flex justify-end">
         <div className="text-sm font-medium text-gray-500 text-right">
-          <p>Subtotal: $1600</p>
+          <p>Subtotal: ${subtotal}</p>
           <p>Shipping Cost: $60</p>
           <hr className="my-1"></hr>
-          <p className=" font-semibold">Total: $1660</p>
+          <p className=" font-semibold">Total: ${subtotal + 60}</p>
         </div>
       </div>
     </div>

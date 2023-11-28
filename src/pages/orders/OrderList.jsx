@@ -1,40 +1,11 @@
 import { Link } from "react-router-dom";
-import moment from "moment/moment";
-import { TbReload } from "react-icons/tb";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { AiOutlineStop } from "react-icons/ai";
-import { MdDone } from "react-icons/md";
-import { TbCurrencyTaka } from "react-icons/tb";
 import { CgMenuMotion } from "react-icons/cg";
-import { useEffect, useRef, useState } from "react";
-const orderStatus = [
-  {
-    id: "s54dfds45f",
-    status: "completed",
-  },
-  {
-    id: "5sdf4ds56f4",
-    status: "pending",
-  },
-  {
-    id: "564fs5d6f4ds6",
-    status: "processing",
-  },
-  {
-    id: "fd4sf4sd56f4d",
-    status: "onHold",
-  },
-];
-
+import { useEffect, useRef } from "react";
+import useOrderData from "../../hooks/useOrderData";
 const OrderList = () => {
-  const [actionButtonListOpen, setActionButtonListOpen] = useState("");
-  const [isActionButtonListOpen, setIsActionButtonListOpen] = useState(false);
+  const { orders } = useOrderData();
   const modalRef = useRef(null);
-  const actionHandleButton = (id) => {
-    setActionButtonListOpen(id);
-    setIsActionButtonListOpen(!isActionButtonListOpen);
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -47,18 +18,34 @@ const OrderList = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  // const setOrderStatusColor = (status) => {
+  //   if (status === "completed") {
+  //     return "bg-[#CCF6E4] text-[#00864e]";
+  //   } else if (status === "pending") {
+  //     return "bg-[#fde6d8] text-[#9d5228] ";
+  //   } else if (status === "processing") {
+  //     return "bg-[#d5e5fa] text-[#1c4f93] ";
+  //   } else {
+  //     return "bg-[#E3E6EA] text-[#7d899b] ";
+  //   }
+  // };
 
-  const setOrderStatusColor = (status) => {
-    if (status === "completed") {
-      return "bg-[#CCF6E4] text-[#00864e]";
-    } else if (status === "pending") {
-      return "bg-[#fde6d8] text-[#9d5228] ";
-    } else if (status === "processing") {
-      return "bg-[#d5e5fa] text-[#1c4f93] ";
-    } else {
-      return "bg-[#E3E6EA] text-[#7d899b] ";
+  const handleStatusChange = async (id, status) => {
+    try {
+      const response = await fetch(`http://localhost:5000/change-status-admin/${id}`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+      const updatedOrder = await response.json();
+      console.log('Updated Order:', updatedOrder);
+    } catch (error) {
+      console.error('Error updating status:', error);
     }
   };
+
 
   return (
     <div className="border w-screen lg:w-full">
@@ -69,24 +56,23 @@ const OrderList = () => {
               <tr>
                 <th>Order</th>
                 <th>Date</th>
-                <th>Order ID</th>
+                <th>Mobile No:</th>
                 <th>Transaction ID</th>
                 <th>Ship To</th>
                 <th>Status</th>
-                <th>Amount</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {orderStatus.map((orderList) => (
-                <tr key={orderList.id}>
+              {orders.map((orderList) => (
+                <tr key={orderList._id}>
                   <td>
                     <span className="flex flex-col">
                       <span className="p-0 text-violet-500 text-sm font-bold">
                         <Link
-                          to={`/orderList/1`}
+                          to={`/orderList/${orderList._id}`}
                           className="text-blue-500 hover:underline">
-                          #544549
+                          {orderList?._id}
                         </Link>
                       </span>
                       <span className="p-0 font-semibold text-blue-500 ">
@@ -94,25 +80,60 @@ const OrderList = () => {
                       </span>
                       <span className="text-gray-400 font-normal">
                         {" "}
-                        by Bulbul Ahmed
+                        {orderList?.savedInfo?.name}
                       </span>
                     </span>
                   </td>
-                  <td className="text-sm font-roboto text-blue-500 tracking-wider">
-                    {moment(Date.now()).format("LLL")}
+                  {/* {
+                    orders?.savedInfo?.map((item, index) => (
+                      <tr key={index}>
+                        <td className="text-sm font-roboto text-blue-500 tracking-wider">
+                          {item?.formattedDate}
+                        </td>
+                        <td className="text-sm font-roboto text-blue-500 tracking-wider">
+                          {item?.mobile}
+                        </td>
+                        <td className="text-sm font-roboto text-blue-500 tracking-wider">
+                          {item?.tran_id}
+                        </td>
+                        <td className="text-xs font-roboto text-blue-500 tracking-wider">
+                          {item?.address}
+                        </td>
+                      </tr>
+                    ))
+                  } */}
+                  <td>{orderList?.savedInfo?.formattedDate}</td>
+                  <td>{orderList?.savedInfo?.mobile}</td>
+                  <td>{orderList?.savedInfo?.tran_id}</td>
+                  <td>{orderList?.savedInfo?.address}</td>
+                  <td>
+                    <div className="flex items-center justify-between gap-1 bg-[#fde6d8] text-[#9d5228] rounded-lg tracking-wide px-2 py-1 font-bold">
+                      <p>{orderList?.status} </p>
+                      <CgMenuMotion size={15} color="#00864e" />
+                    </div>
                   </td>
-                  <td className="text-sm font-roboto text-blue-500 tracking-wider">
-                    01789499829
-                  </td>
-                  <td className="text-sm font-roboto text-blue-500 tracking-wider">
-                    dr48gv6fd56g4df56g4
-                  </td>
-                  <td className="text-xs font-roboto text-blue-500 tracking-wider">
-                    Balakair, Gopalganj,Dhaka,
-                    <span className="font-bold">Home</span>
+                  <td>
+                    <div className="dropdown dropdown-end">
+                      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                        <div className="w-10">
+                          <BsThreeDotsVertical
+                            size={25}
+                            className="cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                      <ul className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                        <li><button onClick={() => handleStatusChange(orderList?._id, 'completed')}>Complete</button> </li>
+                        <li><button onClick={() => handleStatusChange(orderList._id, 'pending')}>Pending</button></li>
+                        <li><button onClick={() => handleStatusChange(orderList._id, 'processing')}>Processing</button></li>
+                        <li><button onClick={() => handleStatusChange(orderList._id, 'onHold')}>OnHold</button></li>
+                        <li><button onClick={() => handleStatusChange(orderList._id, 'rejected')}>Reject</button></li>
+                        <li><button>Delete</button></li>
+                      </ul>
+                    </div>
                   </td>
 
-                  {orderList.status === "completed" && (
+                  {/* {orderList.status === "completed" && (
                     <td>
                       <div className="flex items-center justify-between gap-x-1 bg-[#CCF6E4] text-[#00864e] rounded-lg tracking-wide px-2 py-1 font-bold">
                         <p>Completed </p>
@@ -179,9 +200,12 @@ const OrderList = () => {
                           </ul>
                         </div>
                       )}
-                  </td>
+                  </td> */}
+
+
                 </tr>
               ))}
+
             </tbody>
           </table>
         </div>
