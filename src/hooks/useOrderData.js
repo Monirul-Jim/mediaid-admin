@@ -9,7 +9,7 @@ const useOrderData = () => {
         const getProductCategories = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5000/user-order-collection');
+                const response = await axios.get('https://mediaaid-server.vercel.app/user-order-collection');
                 setOrders(response.data);
                 setLoading(false);
             } catch (error) {

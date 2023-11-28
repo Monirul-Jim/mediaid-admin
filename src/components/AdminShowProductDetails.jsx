@@ -8,7 +8,7 @@ const AdminShowProductDetails = ({ params }) => {
     // useEffect(() => {
     //     const fetchData = async () => {
     //         try {
-    //             const response = await axios.get(`http://localhost:5000/get-product-admin/${params?.id}`);
+    //             const response = await axios.get(`https://mediaaid-server.vercel.app/get-product-admin/${params?.id}`);
     //             setProduct(response.data);
     //         } catch (error) {
     //             console.error('Error fetching product data:', error);
