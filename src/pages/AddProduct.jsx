@@ -164,7 +164,7 @@ const AddProduct = () => {
     const endDate = form.endDate?.value;
     const savedInfo = { title, price, thumbnail, stock, brand, images: imagesArray, startDate, endDate, category, highlight, subcategory, typeOfSelling, description, rating, status, tag, discountPercent, discountVip }
     try {
-      const response = await axios.post('https://mediaaid-server.vercel.app/product-order', savedInfo);
+      const response = await axios.post('http://localhost:5000/product-order', savedInfo);
 
       if (response.status === 200) {
         toast.success('Product added successfully!', {

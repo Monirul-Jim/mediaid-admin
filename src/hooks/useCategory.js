@@ -10,7 +10,7 @@ const useCategory = () => {
         const getProductCategories = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get('https://mediaaid-server.vercel.app/increase-category');
+                const response = await axios.get('http://localhost:5000/increase-category');
                 setCategories(response.data);
                 setIsLoading(false);
             } catch (error) {

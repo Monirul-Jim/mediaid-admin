@@ -11,6 +11,9 @@ import AddCategory from "../pages/AddCategory";
 import Overview from "../pages/overview/Overview";
 import BannerEdit from "../pages/BannerEdit";
 import AdminShowProductDetails from "../components/AdminShowProductDetails";
+import UserCollection from "../pages/products/UserCollection";
+import Login from "../components/LoginRegister/Login";
+import Register from "../components/LoginRegister/Register";
 
 const router = createBrowserRouter([
   {
@@ -38,13 +41,25 @@ const router = createBrowserRouter([
         element: <CustomerDetails />,
       },
       {
+        path: "userLogin",
+        element: <Login />,
+      },
+      {
+        path: "userRegister",
+        element: <Register />,
+      },
+      {
+        path: "userCollection",
+        element: <UserCollection />,
+      },
+      {
         path: "orderList",
         element: <OrderList />,
       },
       {
         path: "orderList/:id",
         element: <OrderDetails />,
-        loader: ({ params }) => fetch(`https://mediaaid-server.vercel.app/user-order-collection/${params.id}`)
+        loader: ({ params }) => fetch(`http://localhost:5000/user-order-collection/${params.id}`)
       },
       {
         path: "productList",
@@ -57,7 +72,7 @@ const router = createBrowserRouter([
       {
         path: 'admin-show-product-details/:id',
         element: <AdminShowProductDetails />,
-        loader: ({ params }) => fetch(`https://mediaaid-server.vercel.app/get-product-admin/${params?.id}`)
+        loader: ({ params }) => fetch(`http://localhost:5000/get-product-admin/${params?.id}`)
       },
       {
         path: "productList/:id",

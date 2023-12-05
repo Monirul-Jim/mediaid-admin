@@ -29,7 +29,7 @@ const AddCategory = () => {
     }
 
     try {
-      const data = await axios.post(`https://mediaaid-server.vercel.app/increase-category`, {
+      const data = await axios.post(`http://localhost:5000/increase-category`, {
         cate: { name, sub },
       });
       if (data) {

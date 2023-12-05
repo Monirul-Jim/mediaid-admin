@@ -1,9 +1,11 @@
 
 
-const OrderedProductTable = ({ cartItems }) => {
+const OrderedProductTable = ({ cartItems, info }) => {
   const subtotal = cartItems.reduce((sum, product) => {
     return sum + product.quantity + product.totalPrice;
   }, 0);
+  const totalAmount = info.totalAmount;
+  console.log(info);
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -16,7 +18,6 @@ const OrderedProductTable = ({ cartItems }) => {
             <th className="text-right">Main Price</th>
             <th className="text-right">Percentage</th>
             <th className="text-right">Main Product Price After Discount</th>
-
             <th className="text-right">Amount</th>
           </tr>
         </thead>
@@ -49,10 +50,12 @@ const OrderedProductTable = ({ cartItems }) => {
       </table>
       <div className="w-full h-fit flex justify-end">
         <div className="text-sm font-medium text-gray-500 text-right">
-          <p>Subtotal: ${subtotal}</p>
-          <p>Shipping Cost: $60</p>
+          {/* <p>Subtotal: ${subtotal}</p>
+          <p>Shipping Cost: $60</p> */}
           <hr className="my-1"></hr>
-          <p className=" font-semibold">Total: ${subtotal + 60}</p>
+          <p className=" font-semibold">Total: ${subtotal}</p>
+          <p className=" font-semibold">After All Cost: ${totalAmount}</p>
+
         </div>
       </div>
     </div>
