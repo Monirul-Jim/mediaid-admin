@@ -9,7 +9,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/get-product-admin');
+        const response = await axios.get('https://mediaaid-server.vercel.app/get-product-admin');
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -30,7 +30,7 @@ const ProductList = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/admin-delete-product/${_id}`, {
+        fetch(`https://mediaaid-server.vercel.app/admin-delete-product/${_id}`, {
           method: 'DELETE'
         })
           .then(data => {

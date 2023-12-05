@@ -35,7 +35,7 @@ const AuthProvider = ({ children }) => {
             setLoading(false)
             // get and set token
             if (curUser) {
-                axios.post('http://localhost:5000/jwt', { email: curUser.email })
+                axios.post('https://mediaaid-server.vercel.app/jwt', { email: curUser.email })
                     .then(data => {
                         localStorage.setItem('access-token', data.data.token)
                         setLoading(false);

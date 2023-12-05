@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       {
         path: "orderList/:id",
         element: <OrderDetails />,
-        loader: ({ params }) => fetch(`http://localhost:5000/user-order-collection/${params.id}`)
+        loader: ({ params }) => fetch(`https://mediaaid-server.vercel.app/user-order-collection/${params.id}`)
       },
       {
         path: "productList",
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
       {
         path: 'admin-show-product-details/:id',
         element: <AdminShowProductDetails />,
-        loader: ({ params }) => fetch(`http://localhost:5000/get-product-admin/${params?.id}`)
+        loader: ({ params }) => fetch(`https://mediaaid-server.vercel.app/get-product-admin/${params?.id}`)
       },
       {
         path: "productList/:id",

@@ -32,7 +32,7 @@ const OrderList = () => {
 
   const handleStatusChange = async (id, status) => {
     try {
-      const response = await fetch(`http://localhost:5000/change-status-admin/${id}`, {
+      const response = await fetch(`https://mediaaid-server.vercel.app/change-status-admin/${id}`, {
         method: 'PUT',
         headers: {
           'content-type': 'application/json',
